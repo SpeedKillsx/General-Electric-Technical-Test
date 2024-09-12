@@ -1,5 +1,10 @@
+import { Clock } from './Model/Clock';
+import { ClockView } from './View/ClockView';
+import { AnalogClockView } from './View/AnaloClockView';
+import { ClockController } from './Controller/ClockController';
 import './index.css';
-import { MyClass } from './example-unit';
 
-const a = new MyClass(2);
-console.log('number is', a.get());
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize the clock
+    ClockController.init();
+});
