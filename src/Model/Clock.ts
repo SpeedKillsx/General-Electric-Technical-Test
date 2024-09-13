@@ -1,75 +1,74 @@
-import {ClockEnum} from '../utils/ClockEnum';
+import { TimeFormatStrategy } from '../strategy/TimeFormatStrategy';
+import { ClockDisplayStrategy } from '../strategy/ClockDisplayStrategy'; // Interface for display strategies
+import { ClockEnum } from '../utils/ClockEnum';
+import { TwentyFourHourFormatStrategy } from '../strategy/TwentyFourHourFormatStrategy';
+import { TwelveHourFormatStrategy } from '../strategy/TwelveHourFormatStrategy';
+
 export class Clock {
     private hours: number;
     private minutes: number;
     private seconds: number;
     private timezoneOffset: number;
-    private editable: ClockEnum  = ClockEnum.none;
+    private editable: ClockEnum = ClockEnum.none;
     private observer: () => void;
-    private is24HourFormat: boolean = true;
-    constructor(timezoneOffset = 0) {
+    private timeFormatStrategy: TimeFormatStrategy;
+    private clockDisplayStrategy: ClockDisplayStrategy;
+
+    constructor(timezoneOffset = 0, timeFormatStrategy: TimeFormatStrategy, clockDisplayStrategy: ClockDisplayStrategy) {
         const now = new Date();
         this.timezoneOffset = timezoneOffset;
+        this.timeFormatStrategy = timeFormatStrategy;
+        this.clockDisplayStrategy = clockDisplayStrategy;
         this.hours = (now.getHours() + timezoneOffset) % 24;
         this.minutes = now.getMinutes();
         this.seconds = now.getSeconds();
         this.startClock();
     }
 
+    /**
+     * Description : Start the timer
+     * @returns {any}
+     */
     private startClock() {
         setInterval(() => {
-           
-                this.seconds++;
-                if (this.seconds >= 60) {
-                    this.seconds = 0;
-                    this.minutes++;
-                    if (this.minutes >= 60) {
-                        this.minutes = 0;
-                        this.hours = (this.hours + 1) % 24;
-                    }
+            this.seconds++;
+            if (this.seconds >= 60) {
+                this.seconds = 0;
+                this.minutes++;
+                if (this.minutes >= 60) {
+                    this.minutes = 0;
+                    this.hours = (this.hours + 1) % 24;
                 }
-                this.notify();
-            
+            }
+            this.notify();
         }, 1000);
     }
+   // Getters
     public getTime() {
-        let displayHours = this.hours;
-        let ampm = '';
-        
-        if (!this.is24HourFormat) {
-            ampm = displayHours >= 12 ? 'PM' : 'AM';
-            displayHours = displayHours % 12 || 12; // Convert to 12-hour format
-        }
-
-        return {
-            hours: displayHours.toString().padStart(2, '0'),
-            minutes: this.minutes.toString().padStart(2, '0'),
-            seconds: this.seconds.toString().padStart(2, '0'),
-            ampm
-        };
+        return this.timeFormatStrategy.formatTime(this.hours, this.minutes, this.seconds);
     }
 
     public getEditable(): ClockEnum {
         return this.editable;
     }
 
+    public getTimeFormatStrategy():TimeFormatStrategy{
+        return this.timeFormatStrategy;
+    }
+    // Setter
     public setEditable(part: ClockEnum) {
         this.editable = part;
-        this.notify(); 
+        this.notify();
     }
 
-    public getIs24HourFormat() : boolean
-    {
-        return this.is24HourFormat;
-    }
-    public setIs24HourFormat() : void
-    {
-        this.is24HourFormat = !this.is24HourFormat;
-    }
+    
 
-
+    /**
+     * Description : Increase the element (hours or minuties) in case it was selectioned as the modifiable ellement
+     * @returns {any}
+     */
     public increaseTime() {
-        if (this.editable === ClockEnum.Hours) {
+        if (this.editable === ClockEnum.Hours) { // Check the valeu of the editable
             this.hours = (this.hours + 1) % 24;
         } else if (this.editable === ClockEnum.Minutes) {
             this.minutes = (this.minutes + 1) % 60;
@@ -79,14 +78,11 @@ export class Clock {
         }
         this.notify();
     }
-
-    public onChange(callback: () => void) {
-        this.observer = callback;
-    }
-
-    
+    // Function to change Format
     public toggleFormat() {
-        this.is24HourFormat = !this.is24HourFormat;
+        this.timeFormatStrategy = this.timeFormatStrategy instanceof TwentyFourHourFormatStrategy
+            ? new TwelveHourFormatStrategy()
+            : new TwentyFourHourFormatStrategy();
         this.notify();
     }
 
@@ -97,6 +93,11 @@ export class Clock {
         this.seconds = now.getSeconds();
         this.notify();
     }
+
+    public onChange(callback: () => void) {
+        this.observer = callback;
+    }
+
     private notify() {
         if (this.observer) {
             this.observer();

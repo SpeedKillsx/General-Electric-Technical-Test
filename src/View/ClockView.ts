@@ -12,12 +12,13 @@ export class ClockView {
         this.model.onChange(() => this.update());
         this.update();
     }
-    public getisLightOn(): boolean{
+
+    public getisLightOn(): boolean {
         return this.isLightOn;
     }
 
     public update() {
-        const { hours, minutes, seconds, ampm } = this.model.getTime();
+        const { hours, minutes, seconds, ampm } = this.model.getTime(); // Use getTime() from Clock
         this.clockElement.innerHTML = `
             <span class="hours">${hours}</span>:
             <span class="minutes">${minutes}</span>:
@@ -26,9 +27,8 @@ export class ClockView {
         this.updateBlinking();
     }
 
-
     private updateBlinking() {
-        const editable = this.model.getEditable();
+        const editable = this.model.getEditable(); // Ensure getEditable() is defined in Clock
         const hoursElement = this.clockElement.querySelector('.hours') as HTMLElement;
         const minutesElement = this.clockElement.querySelector('.minutes') as HTMLElement;
 
@@ -46,11 +46,7 @@ export class ClockView {
 
     public toggleLight() {
         this.isLightOn = !this.isLightOn;
-        if (this.isLightOn === true){
-            alert('The light is turn ON!');
-        }else{
-            alert('The light is turn OFF!');
-        }
+        
         this.clockElement.style.backgroundColor = this.isLightOn ? '#FBE106' : '#FFFFFF';
     }
 }

@@ -1,7 +1,10 @@
 /* Centering the main container */
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    justify-items: center;
+    
     align-items: center;
     height: 100vh;
     margin: 0;

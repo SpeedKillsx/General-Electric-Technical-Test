@@ -2,6 +2,10 @@ import { Clock } from '../Model/Clock';
 import { ClockView } from '../View/ClockView';
 import { AnalogClockView } from '../View/AnaloClockView';
 import { ClockEnum } from '../utils/ClockEnum';
+import { TwentyFourHourFormatStrategy } from '../strategy/TwentyFourHourFormatStrategy';
+import { TwelveHourFormatStrategy } from '../strategy/TwelveHourFormatStrategy';
+import { DigitalClockDisplayStrategy } from '../strategy/DigitalClockDisplayStrategy';
+import { AnalogClockDisplayStrategy } from '../strategy/AnalogClockDisplayStrategy';
 
 export class ClockController {
     private model: Clock;
@@ -9,22 +13,33 @@ export class ClockController {
     private modeState: number = 0;
     private static isInitialized: boolean = false;
 
+    /**
+     * Description : Instanciate a Controller
+     * @param {Clock} model:Clock
+     * @param {ClcokView} view:ClockView|AnalogClockView
+     * @returns {void}
+     */
     constructor(model: Clock, view: ClockView | AnalogClockView) {
         this.model = model;
         this.view = view;
         this.setupEventListeners();
     }
-
+    /*
+        Initialize all the colock:
+        * Setup Buttons 
+        * Use a boolean variable to check if there was an initialization or not.
+     */
     public static init() {
-        // S'assurer que l'initialisation n'est effectuée qu'une seule fois
         if (ClockController.isInitialized) {
             return;
         }
-
         ClockController.setupButtons();
         ClockController.isInitialized = true;
     }
-
+    /**
+     * Setup the differnet events from the buttons
+     * Check if a button was clicked an try to find it
+     */
     private setupEventListeners() {
         const modeButton = document.getElementById('mode') as HTMLButtonElement;
         const increaseButton = document.getElementById('increase') as HTMLButtonElement;
@@ -49,7 +64,7 @@ export class ClockController {
         }
 
         if (resetButton) {
-            resetButton.addEventListener('click', () => this.handleResetButton());
+            resetButton.addEventListener('click', () =>this.handleResetButton());
         }
     }
 
@@ -64,7 +79,11 @@ export class ClockController {
         console.log('Adding a new clock');
         this.createClock();
     }
-
+    /* */
+    /**
+     * Create a Clock , the code create a div container to visualize the clock using the ClockView or AnalogView class
+     * @returns {any}
+     */
     private static createClock() {
         const clocksContainer = document.getElementById('clocks') as HTMLDivElement;
 
@@ -80,30 +99,31 @@ export class ClockController {
         clockElement.classList.add('clock');
         clockWrapper.appendChild(clockElement);
 
-        // Obtenir le décalage horaire de l'utilisateur
         const timezoneOffset = parseInt(prompt("Insert your time zone (0 for GMT; 1 for GMT+1, -5 for GMT-5)") || '0');
         const isAnalog = confirm("Would you like to add an analog clock?");
+        
+        const timeFormatStrategy = new TwentyFourHourFormatStrategy();
+        const clockDisplayStrategy = isAnalog 
+            ? new AnalogClockDisplayStrategy()
+            : new DigitalClockDisplayStrategy();
 
-        const clock = new Clock(timezoneOffset);
+        const clock = new Clock(timezoneOffset, timeFormatStrategy, clockDisplayStrategy);
 
         if (isAnalog) {
-            const analogClockView = new AnalogClockView(clock, clockElement); // Créer une horloge analogique
-            new ClockController(clock, analogClockView); // Passer l'horloge analogique au contrôleur
+            const analogClockView = new AnalogClockView(clock, clockElement);
+            new ClockController(clock, analogClockView);
         } else {
-            const clockView = new ClockView(clock, clockElement); // Créer une horloge numérique
-            new ClockController(clock, clockView); // Passer l'horloge numérique au contrôleur
+            const clockView = new ClockView(clock, clockElement);
+            new ClockController(clock, clockView);
         }
 
-        // Créer le bouton de suppression
         const removeButton = document.createElement('button');
         removeButton.innerText = 'Remove';
         removeButton.classList.add('remove-button');
         clockWrapper.appendChild(removeButton);
 
-        // Ajouter l'horloge au conteneur
         clocksContainer.appendChild(clockWrapper);
 
-        // Ajouter un événement pour supprimer l'horloge
         removeButton.addEventListener('click', () => {
             clockWrapper.remove();
         });
@@ -125,30 +145,36 @@ export class ClockController {
     }
 
     private handleLightButton() {
-        // Vérifier si la vue est une horloge numérique avant de basculer la lumière
         if (this.view instanceof ClockView) {
             this.view.toggleLight();
-            
         }
     }
 
     private handleFormatButton() {
-        this.model.toggleFormat();
-        alert('The time is shown in AM/PM format!!');
+        this.model.toggleFormat(); // D'abord, change le format
+    
+        const format = this.model.getTimeFormatStrategy() instanceof TwelveHourFormatStrategy 
+            ? "AM/PM" 
+            : "24-hour"; // Détermine quel est le format courant
+    
+        this.view.update(); // Met à jour l'affichage
     }
-
+    
+    /*
+     */
     private handleResetButton() {
-        // Check if the clock is digital
         this.model.resetTime();
-        if (this.view instanceof ClockView){
-            if (this.view.getisLightOn() === true){
+        if (this.view instanceof ClockView) {
+            if (this.view.getisLightOn()) {
                 this.view.toggleLight();
-            } 
-            // Check if the model is in am/pm format
-            if (this.model.getIs24HourFormat() === false){
-                
-                this.model.toggleFormat();
+               
             }
+            
+                
+            
         }
+        if(this.model.getTimeFormatStrategy() instanceof TwelveHourFormatStrategy)
+            this.model.toggleFormat();
+            this.view.update();
     }
 }
