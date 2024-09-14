@@ -8,17 +8,16 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #1c1c1c; /* Dark background for contrast */
-    font-family: 'Orbitron', sans-serif; /* Futuristic font */
-    color: #00ffea; /* Neon text color */
+    background-color: #1c1c1c; 
+    font-family: 'Orbitron', sans-serif; 
+    color: #00ffea; 
 }
 
-/* Container for all clocks */
 .clocks-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 20px; /* Space between clocks */
+    gap: 20px; 
 }
 
 
@@ -27,13 +26,13 @@ body {
     display: flex;
     flex-direction: row;
     font-size: 3em;
-    background-color: #FFFFFF; /* Translucent black */
+    background-color: #FFFFFF;
     padding: 20px;
     text-align: center;
     width: 250px;
     border-radius: 12px;
-    border: 2px solid #00ffea; /* Neon border */
-    box-shadow: 0 0 20px #00ffea, 0 0 40px #ff00ff; /* Neon glow */
+    border: 2px solid #00ffea; 
+    box-shadow: 0 0 20px #00ffea, 0 0 40px #ff00ff; 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -52,37 +51,36 @@ body {
     50% { visibility: hidden; }
 }
 
-/* Button styling */
+
 button {
     margin: 10px;
     padding: 15px 25px;
     border-radius: 8px;
-    border: 2px solid #ff00ff; /* Neon pink border */
-    background-color: #1a1a1a; /* Dark background */
-    color: #00ffea; /* Neon text */
+    border: 2px solid #ff00ff; 
+    background-color: #1a1a1a; 
+    color: #00ffea; 
     font-size: 1em;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
-    text-transform: uppercase; /* Cyberpunk style text */
+    text-transform: uppercase; 
     box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
 }
 
 button:hover {
-    background-color: #ff00ff; /* Neon pink on hover */
-    color: #1a1a1a; /* Inverted text color */
+    background-color: #ff00ff; 
+    color: #1a1a1a; 
     transform: translateY(-3px);
     box-shadow: 0 0 20px #00ffea, 0 0 40px #00ffea;
 }
 
-/* Remove clock button styling */
 .remove-clock {
-    background-color: #ff0055; /* Neon red */
+    background-color: #ff0055; 
     color: white;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     padding: 10px;
-    margin-left: 10px; /* Add margin to the left of the clock */
+    margin-left: 10px; 
     box-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055;
     transition: background-color 0.3s, transform 0.3s;
 }

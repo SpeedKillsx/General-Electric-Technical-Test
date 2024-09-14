@@ -82,7 +82,7 @@ export class ClockController {
     /* */
     /**
      * Create a Clock , the code create a div container to visualize the clock using the ClockView or AnalogView class
-     * @returns {any}
+     * @returns {void}
      */
     private static createClock() {
         const clocksContainer = document.getElementById('clocks') as HTMLDivElement;
@@ -150,21 +150,25 @@ export class ClockController {
         }
     }
 
+    /**
+     * Description:
+     * Change the time format of the clock
+     * @returns {void}
+     */
     private handleFormatButton() {
-        this.model.toggleFormat(); // D'abord, change le format
-    
+        this.model.toggleFormat(); // Call the model to change the format
+        // Check wich format to use 
         const format = this.model.getTimeFormatStrategy() instanceof TwelveHourFormatStrategy 
             ? "AM/PM" 
-            : "24-hour"; // Détermine quel est le format courant
-    
-        this.view.update(); // Met à jour l'affichage
+            : "24-hour"; 
+        // Update the view
+        this.view.update(); 
     }
     
-    /*
-     */
+ 
     private handleResetButton() {
-        this.model.resetTime();
-        if (this.view instanceof ClockView) {
+        this.model.resetTime();// Rest the time
+        if (this.view instanceof ClockView) { //check if the view is a digital clock
             if (this.view.getisLightOn()) {
                 this.view.toggleLight();
                
@@ -173,7 +177,7 @@ export class ClockController {
                 
             
         }
-        if(this.model.getTimeFormatStrategy() instanceof TwelveHourFormatStrategy)
+        if(this.model.getTimeFormatStrategy() instanceof TwelveHourFormatStrategy) // Rest the format
             this.model.toggleFormat();
             this.view.update();
     }
