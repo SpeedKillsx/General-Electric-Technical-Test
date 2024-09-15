@@ -1,27 +1,39 @@
-/* Centering the main container */
+h1 {
+    position: relative;
+    top: 0;
+    margin: 20px 0;
+    font-size: 3.5em; 
+    font-weight: 700;
+    color: #5A20CB; 
+    text-align: center; 
+    letter-spacing: 2px; 
+    text-transform: uppercase; 
+    font-family: 'Orbitron', sans-serif; 
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); 
+}
+
 body {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    justify-items: center;
-    
+    justify-content: flex-start; 
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #1c1c1c; 
-    font-family: 'Orbitron', sans-serif; 
-    color: #00ffea; 
+    padding-top: 100px; 
+    background-color: #F2F2F2;
+    font-family: 'Orbitron', sans-serif;
+    color: #5A20CB; 
 }
 
 .clocks-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 20px; 
+    flex-wrap: wrap; 
+    gap: 20px;
+    justify-content: center; 
 }
 
-
-/* Clock styling */
 .clock {
     display: flex;
     flex-direction: row;
@@ -31,17 +43,17 @@ body {
     text-align: center;
     width: 250px;
     border-radius: 12px;
-    border: 2px solid #00ffea; 
-    box-shadow: 0 0 20px #00ffea, 0 0 40px #ff00ff; 
+    border: 2px solid #5A20CB; 
+    box-shadow: 0 0 20px #5A20CB, 0 0 40px #4E14A7; 
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .clock:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 30px #ff00ff, 0 0 60px #ff00ff; /* Stronger glow on hover */
+    box-shadow: 0 0 30px #4E14A7, 0 0 60px #4E14A7; 
 }
 
-/* Blinking effect for time adjustment */
+
 .blinking {
     animation: blink 1s steps(1, end) infinite;
 }
@@ -51,48 +63,46 @@ body {
     50% { visibility: hidden; }
 }
 
-
 button {
     margin: 10px;
     padding: 15px 25px;
     border-radius: 8px;
-    border: 2px solid #ff00ff; 
-    background-color: #1a1a1a; 
-    color: #00ffea; 
+    border: 2px solid #5A20CB;
+    background-color: #ffffff; 
+    color: #5A20CB; 
     font-size: 1em;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
-    text-transform: uppercase; 
-    box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px #5A20CB, 0 0 20px #4E14A7;
 }
 
 button:hover {
-    background-color: #ff00ff; 
-    color: #1a1a1a; 
+    background-color: #5A20CB; 
+    color: #ffffff;
     transform: translateY(-3px);
-    box-shadow: 0 0 20px #00ffea, 0 0 40px #00ffea;
+    box-shadow: 0 0 20px #4E14A7, 0 0 40px #4E14A7;
 }
 
 .remove-clock {
-    background-color: #ff0055; 
+    background-color: #E60028; 
     color: white;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     padding: 10px;
-    margin-left: 10px; 
-    box-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055;
+    margin-left: 10px;
+    box-shadow: 0 0 10px #E60028, 0 0 20px #E60028;
     transition: background-color 0.3s, transform 0.3s;
 }
 
 .remove-clock:hover {
-    background-color: #ff1a75;
+    background-color: #B3001F; 
     transform: scale(1.1);
 }
 
-clock-wrapper{
+.clock-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-
 }
